@@ -262,9 +262,12 @@ if __name__ == '__main__':
         j += 1
 #        f.write(struct.pack('I', len(s)) + s)
 #        f.write(struct.pack('f', len(str(pt3D.x))) + str(pt3D.x))
+        message = str(pt3D.x) + str('') + str(pt3D.y) + str('') + str(pt3D.z) + str('') + str(pt3D.w)
+        
+        f.write(struct.pack('I', len(message)) + message)
         f.seek(0)
         print 'Wrote;', pt3D.x
-        print 'Length: ', len(str(pt3D.x))
+#        print 'Length: ', len(str(pt3D.x)) # len = 13
    #-------------------------------------------------------------           
             
             
