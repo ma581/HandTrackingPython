@@ -235,6 +235,7 @@ if __name__ == '__main__':
 #        decoding = numpy.array(decoding)
 #        print("decoding=",decoding)
         zero = Core.Vector4(0, 0, 0, 1)
+        matrix = numpy.zeros( (22,4) )
         for d in decoding.values():
             i =0;
             for m in d.matrices:
@@ -245,28 +246,43 @@ if __name__ == '__main__':
 #                pt3DArray = numpy.array(pt3D)
 #                print("pt3DArray=",pt3DArray)
 #                print("m =",m)
-                i=i+1
-#                print((pt3D.x, pt3D.y, pt3D.z, pt3D.w))
                 
+                matrix[i,:] = pt3D.x, pt3D.y, pt3D.z, pt3D.w #Store values in matrix
+                
+                #print((pt3D.x, pt3D.y, pt3D.z, pt3D.w))
+                
+                
+               
+#                message = x + comma + y + comma + z + comma + w
+#                             
+#                
+#                f.write(struct.pack('I', len(message)) + message)
+#                f.seek(0)
+#                print 'Wrote;', pt3D.x
                 
                 
 #                print("I = ",i)
-                
+                i=i+1
                 # 2D projected point in homogeneous coordinates
 #                pt2D = viewport * proj * view * m * zero
-                
-            print("\n")
+            if i == 22: #If the matrix is for finger coordinates (otherwise i == 16)
+                print("i = ",i)
+                message = str(matrix)
+                f.write(struct.pack('I', len(message)) + message)
+                f.seek(0)
+                print 'Wrote;', str(matrix)                
+                print("\n")
             
          #Pipework    
         s = 'Message[{0}]'.format(j)
         j += 1
 #        f.write(struct.pack('I', len(s)) + s)
 #        f.write(struct.pack('f', len(str(pt3D.x))) + str(pt3D.x))
-        message = str(pt3D.x) + str('') + str(pt3D.y) + str('') + str(pt3D.z) + str('') + str(pt3D.w)
-        
-        f.write(struct.pack('I', len(message)) + message)
-        f.seek(0)
-        print 'Wrote;', pt3D.x
+#        message = str(pt3D.x) #+ str('') + str(pt3D.y) + str('') + str(pt3D.z) + str('') + str(pt3D.w)
+#        
+#        f.write(struct.pack('I', len(message)) + message)
+#        f.seek(0)
+#        print 'Wrote;', pt3D.x
 #        print 'Length: ', len(str(pt3D.x)) # len = 13
    #-------------------------------------------------------------           
             
