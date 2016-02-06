@@ -6,6 +6,8 @@ Single Hand tracking pipeline using FORTH libraries.
 #Import numpy %%Manoj
 import numpy
 import struct
+#import sys
+
 # Core stuff, like containers.
 import PyMBVCore as Core
 # Image acquisition.
@@ -31,6 +33,8 @@ if __name__ == '__main__':
     # Opening Pipe ---Manoj
     f = open(r'\\.\pipe\NPtest', 'r+b', 0)
     j = 1
+    TransformMatrix = numpy.matrix(' 0.0013   -0.0009   -0.0000  270.4534; -0.0006   -0.0004    0.0000    1.2637; -0.0023   -0.0030    0.0000  285.0540; 0         0         0       1 ')
+    #print TransformMatrix
     
     # Turn off logging
     Core.InitLog(['handTracker', 'log.severity', 'error'])
@@ -235,7 +239,11 @@ if __name__ == '__main__':
 #        decoding = numpy.array(decoding)
 #        print("decoding=",decoding)
         zero = Core.Vector4(0, 0, 0, 1)
-        matrix = numpy.zeros( (22,4) )
+        
+        matrix = numpy.zeros( (22,4) )  # To store values to send to Unity
+        
+        traMatrix = numpy.zeros( (22,4) )  # To store converted values to send to Unity
+        numpy.set_printoptions(suppress=True)
         for d in decoding.values():
             i =0;
             for m in d.matrices:
@@ -247,9 +255,12 @@ if __name__ == '__main__':
 #                print("pt3DArray=",pt3DArray)
 #                print("m =",m)
                 
-                matrix[i,:] = pt3D.x, pt3D.y, pt3D.z, pt3D.w #Store values in matrix
+                matrix[i,:] = pt3D.x; pt3D.y; pt3D.z; pt3D.w #Store values in matrix
+                #print("matrix=", matrix[i,:])
                 
-                #print((pt3D.x, pt3D.y, pt3D.z, pt3D.w))
+                traMatrix[i,:] = numpy.around(TransformMatrix.dot(matrix[i,:]), decimals=4)
+                #print("traMatrix= ", traMatrix[i,:] )
+                #numpy.savetxt(sys.stdout, traMatrix[i,:], fmt='%.44f')
                 
                 
                
@@ -267,10 +278,10 @@ if __name__ == '__main__':
 #                pt2D = viewport * proj * view * m * zero
             if i == 22: #If the matrix is for finger coordinates (otherwise i == 16)
                 print("i = ",i)
-                message = str(matrix)
+                message = str(traMatrix)
                 f.write(struct.pack('I', len(message)) + message)
                 f.seek(0)
-                print 'Wrote;', str(matrix)                
+                print 'Wrote;', str(traMatrix)                
                 print("\n")
             
          #Pipework    
