@@ -296,7 +296,7 @@ if __name__ == '__main__':
 #                pt2D = viewport * proj * view * m * zero
             if i == 22: #If the matrix is for finger coordinates (otherwise i == 16)
                 print("i = ",i)
-                message = str(traMatrix)
+                message = str(traMatrix[:,[0,1,2]])
                 f.write(struct.pack('I', len(message)) + message)
                 f.seek(0)
                 print 'Wrote;', str(traMatrix)                
