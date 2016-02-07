@@ -254,9 +254,26 @@ if __name__ == '__main__':
 #                pt3DArray = numpy.array(pt3D)
 #                print("pt3DArray=",pt3DArray)
 #                print("m =",m)
-                
-                matrix[i,:] = pt3D.x; pt3D.y; pt3D.z; pt3D.w #Store values in matrix
-                #print("matrix=", matrix[i,:])
+                var = numpy.array([pt3D.x, pt3D.y, pt3D.z, pt3D.w ])
+                var = var/pt3D.w #Scale matrix
+                matrix[i,:] = var #Store values in matrix 
+#                print("x=", pt3D.x)
+#                print("y=", pt3D.y)
+#                print("z=", pt3D.z)
+#                print("w=", pt3D.w)
+#                
+#                print(matrix[i,:])
+#                print(type(matrix[i,:]))
+#                print(matrix[i,3])
+#                print(type(matrix[i,3]))
+#                print (matrix[i,:]/matrix[i,3])
+#                print ("\n")
+                #print (matrix[i,:])
+                #print (matrix)
+#                w = float(1/5)
+#                print ("1/W=", w)
+#                SP = 0*matrix[i,:]
+#                print("matrix=", SP)
                 
                 traMatrix[i,:] = numpy.around(TransformMatrix.dot(matrix[i,:]), decimals=4)
                 #print("traMatrix= ", traMatrix[i,:] )
@@ -274,6 +291,7 @@ if __name__ == '__main__':
                 
 #                print("I = ",i)
                 i=i+1
+                
                 # 2D projected point in homogeneous coordinates
 #                pt2D = viewport * proj * view * m * zero
             if i == 22: #If the matrix is for finger coordinates (otherwise i == 16)
@@ -283,6 +301,7 @@ if __name__ == '__main__':
                 f.seek(0)
                 print 'Wrote;', str(traMatrix)                
                 print("\n")
+                
             
          #Pipework    
         s = 'Message[{0}]'.format(j)
