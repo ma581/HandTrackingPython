@@ -6,6 +6,7 @@ Single Hand tracking pipeline using FORTH libraries.
 #Import numpy %%Manoj
 import numpy
 import struct
+import pdb #Debugging
 #import sys
 
 # Core stuff, like containers.
@@ -33,7 +34,9 @@ if __name__ == '__main__':
     # Opening Pipe ---Manoj
     f = open(r'\\.\pipe\NPtest', 'r+b', 0)
     j = 1
-    TransformMatrix = numpy.matrix(' 0.0013   -0.0009   -0.0000  270.4534; -0.0006   -0.0004    0.0000    1.2637; -0.0023   -0.0030    0.0000  285.0540; 0         0         0       1 ')
+    #TransformMatrix = numpy.matrix(' 0.0013   -0.0009   -0.0000  270.4534; -0.0006   -0.0004    0.0000    1.2637; -0.0023   -0.0030    0.0000  285.0540; 0         0         0       1 ')
+    TransformMatrix = numpy.matrix(' -0.0009   -0.0004   -0.0000  275.4656; 0.0004   -0.0007    -0.0000    1.1956; -0.0005   -0.0008    0.0000  275.5262; 0         0         0       1 ')
+
     #print TransformMatrix
     
     # Turn off logging
@@ -240,10 +243,10 @@ if __name__ == '__main__':
 #        print("decoding=",decoding)
         zero = Core.Vector4(0, 0, 0, 1)
         
-        matrix = numpy.zeros( (22,4) )  # To store values to send to Unity
-        
+        matrix = numpy.zeros( (22,4) )  # To store values to send to Unity      
         traMatrix = numpy.zeros( (22,4) )  # To store converted values to send to Unity
-        numpy.set_printoptions(suppress=True)
+        numpy.set_printoptions(suppress=True) # To remove scientific notation
+        
         for d in decoding.values():
             i =0;
             for m in d.matrices:
@@ -257,29 +260,13 @@ if __name__ == '__main__':
                 var = numpy.array([pt3D.x, pt3D.y, pt3D.z, pt3D.w ])
                 var = var/pt3D.w #Scale matrix
                 matrix[i,:] = var #Store values in matrix 
-#                print("x=", pt3D.x)
-#                print("y=", pt3D.y)
-#                print("z=", pt3D.z)
-#                print("w=", pt3D.w)
-#                
-#                print(matrix[i,:])
-#                print(type(matrix[i,:]))
-#                print(matrix[i,3])
-#                print(type(matrix[i,3]))
-#                print (matrix[i,:]/matrix[i,3])
-#                print ("\n")
-                #print (matrix[i,:])
-                #print (matrix)
-#                w = float(1/5)
-#                print ("1/W=", w)
-#                SP = 0*matrix[i,:]
-#                print("matrix=", SP)
+                #raw_input("Press Enter to continue...")  
                 
                 traMatrix[i,:] = numpy.around(TransformMatrix.dot(matrix[i,:]), decimals=4)
                 #print("traMatrix= ", traMatrix[i,:] )
                 #numpy.savetxt(sys.stdout, traMatrix[i,:], fmt='%.44f')
                 
-                
+                #pdb.set_trace() debugging
                
 #                message = x + comma + y + comma + z + comma + w
 #                             
@@ -296,12 +283,12 @@ if __name__ == '__main__':
 #                pt2D = viewport * proj * view * m * zero
             if i == 22: #If the matrix is for finger coordinates (otherwise i == 16)
                 print("i = ",i)
-                message = str(traMatrix[:,[0,1,2]])
+                message = str(traMatrix[:,[0,1,2]]) #send only x,y,z
                 f.write(struct.pack('I', len(message)) + message)
                 f.seek(0)
                 print 'Wrote;', str(traMatrix)                
                 print("\n")
-                
+                #pdb.set_trace() # for debugging
             
          #Pipework    
         s = 'Message[{0}]'.format(j)
