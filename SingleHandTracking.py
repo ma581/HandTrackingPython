@@ -35,7 +35,11 @@ if __name__ == '__main__':
     f = open(r'\\.\pipe\NPtest', 'r+b', 0)
     j = 1
     #TransformMatrix = numpy.matrix(' 0.0013   -0.0009   -0.0000  270.4534; -0.0006   -0.0004    0.0000    1.2637; -0.0023   -0.0030    0.0000  285.0540; 0         0         0       1 ')
-    TransformMatrix = numpy.matrix(' -0.0009   -0.0004   -0.0000  275.4656; 0.0004   -0.0007    -0.0000    1.1956; -0.0005   -0.0008    0.0000  275.5262; 0         0         0       1 ')
+    #TransformMatrix = numpy.matrix(' -0.0009   -0.0004   -0.0000  275.4656; 0.0004   -0.0007    -0.0000    1.1956; -0.0005   -0.0008    0.0000  275.5262; 0         0         0       1 ')
+    #TransformMatrix = numpy.matrix(' -0.0017   -0.0007   0.0000  275.4278; -0.0014   0.0000    0.0000    1.1321; -0.0000  -0.0001    0.0000  275.5494; 0         0         0       1 ')
+    #TransformMatrix = numpy.array([[-0.0017,   -0.0007,   0.0000,  275.4278],[-0.0014,   0.0000,    0.0000,    1.1321],[-0.0000,  -0.0001,    0.0000,  275.5494],[0,         0,         0,      1]])
+    #TransformMatrix = numpy.array([[-0.0017,   6.6659e-4,   1.8932e-5,  275.4278],[-0.0014,   1.6911e-5,    2.4645e-5,    1.1321],[-4.3299e-5,  -5.7662e-5,    1.2458e-6,  275.5494],[1.7347e-17,         1.3010e-18,         5.4210e-20,      1]])
+    TransformMatrix = numpy.array([[-0.0010,   2.4299e-6,   -0.0018,  277.0516],[2.8855e-5,   -8.9316e-4,    4.5465e-5,    1.1385],[9.3134e-7,  -1.0048e-4,    1.9797e-6,  275.5476],[0,         1.7347e-18,        -1.3878e-17,      1]])
 
     #print TransformMatrix
     
@@ -261,8 +265,12 @@ if __name__ == '__main__':
                 var = var/pt3D.w #Scale matrix
                 matrix[i,:] = var #Store values in matrix 
                 #raw_input("Press Enter to continue...")  
-                
-                traMatrix[i,:] = numpy.around(TransformMatrix.dot(matrix[i,:]), decimals=4)
+                print("i = ",i)
+                print ("Var = ", var)
+                #print ("TraMatrix = ", TransformMatrix)
+                #traMatrix[i,:] = numpy.around(TransformMatrix.dot(var), decimals=4)
+                traMatrix[i,:] = numpy.around(numpy.dot(TransformMatrix,var), decimals=4)
+                print("traArr = " , traMatrix[i,:] )
                 #print("traMatrix= ", traMatrix[i,:] )
                 #numpy.savetxt(sys.stdout, traMatrix[i,:], fmt='%.44f')
                 
@@ -276,13 +284,14 @@ if __name__ == '__main__':
 #                print 'Wrote;', pt3D.x
                 
                 
-#                print("I = ",i)
+                
                 i=i+1
                 
                 # 2D projected point in homogeneous coordinates
 #                pt2D = viewport * proj * view * m * zero
             if i == 22: #If the matrix is for finger coordinates (otherwise i == 16)
                 print("i = ",i)
+                print("Matrix = ", matrix)
                 message = str(traMatrix[:,[0,1,2]]) #send only x,y,z
                 f.write(struct.pack('I', len(message)) + message)
                 f.seek(0)
