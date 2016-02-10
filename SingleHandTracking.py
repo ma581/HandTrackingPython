@@ -107,7 +107,7 @@ if __name__ == '__main__':
               'high' : Ch.RegisteredDepth | Ch.Color }
 
     # low or high
-    RESOLUTION = 'high'
+    RESOLUTION = 'low'
     acq = Acquisition.Kinect2MSGrabber(FLAGS[RESOLUTION])
 
     # Initialization for the hand pose of the first frame is specified.
