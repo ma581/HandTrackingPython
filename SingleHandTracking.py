@@ -265,12 +265,12 @@ if __name__ == '__main__':
                 var = var/pt3D.w #Scale matrix
                 matrix[i,:] = var #Store values in matrix 
                 #raw_input("Press Enter to continue...")  
-                print("i = ",i)
-                print ("Var = ", var)
+                #print("i = ",i)
+                #print ("Var = ", var)
                 #print ("TraMatrix = ", TransformMatrix)
                 #traMatrix[i,:] = numpy.around(TransformMatrix.dot(var), decimals=4)
                 traMatrix[i,:] = numpy.around(numpy.dot(TransformMatrix,var), decimals=4)
-                print("traArr = " , traMatrix[i,:] )
+                #print("traArr = " , traMatrix[i,:] )
                 #print("traMatrix= ", traMatrix[i,:] )
                 #numpy.savetxt(sys.stdout, traMatrix[i,:], fmt='%.44f')
                 
@@ -292,10 +292,10 @@ if __name__ == '__main__':
             if i == 22: #If the matrix is for finger coordinates (otherwise i == 16)
                 print("i = ",i)
                 print("Matrix = ", matrix)
-                message = str(traMatrix[:,[0,1,2]]) #send only x,y,z
+                message = str(matrix[:,[0,1,2]]) #send only x,y,z
                 f.write(struct.pack('I', len(message)) + message)
                 f.seek(0)
-                print 'Wrote;', str(traMatrix)                
+                print 'traMatrix', str(matrix)                
                 print("\n")
                 #pdb.set_trace() # for debugging
             
